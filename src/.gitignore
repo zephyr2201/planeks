@@ -1,0 +1,30 @@
+# Idea
+.idea
+.vscode
+# Byte-compiled / optimized / DLL files
+*.log
+*.pot
+*.pyc
+__pycache__
+
+
+media
+staticfiles
+
+# env file
+.env
+
+# database
+data
+
+#Flake
+.flake8
+
+#vscode
+.vscode
+
+# Test / Coverage
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
