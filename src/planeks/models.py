@@ -14,9 +14,11 @@ class BaseModel(models.Model):
 class Csv(BaseModel):
     SEPARATORS = [('1', 'Comma(,)'), ('2', 'Semicolon(;)')]
     QUOTE = [('1', 'Double-quote(")'), ('2', "Single-quote(')")]
+    row = models.IntegerField(null=True)
     name = models.CharField(max_length=255, blank=False, null=False)
     column_separator = models.CharField(max_length=50, null=False, choices=SEPARATORS)
     string_characters = models.CharField(max_length=50, null=False, choices=QUOTE)
+    csv_file = models.FileField(upload_to='media', blank=True, null=True)
 
     class Meta:
         verbose_name = 'New schema'
@@ -27,11 +29,11 @@ class Column(models.Model):
     CHOICES = [
         ('1', 'Full name'), ('2', 'Job'),
         ('3', 'Email'), ('4', 'Site'),
-        ('5', 'Phone number'), ('2', 'Company'),
-        ('1', 'Text'), ('2', 'Integer'),
-        ('1', 'Address'), ('2', 'Date'),
+        ('5', 'Phone number'), ('6', 'Company'),
+        ('7', 'Text'), ('8', 'Integer'),
+        ('9', 'Address'), ('10', 'Date'),
     ]
     column_name = models.CharField(max_length=50, blank=False, null=False)
     type = models.CharField(max_length=50, null=False, choices=CHOICES)
     order = models.IntegerField()
-    csv = models.ForeignKey(Csv, on_delete=CASCADE, null=True)
+    csv = models.ForeignKey(Csv, on_delete=CASCADE, null=True, related_name='columns')
