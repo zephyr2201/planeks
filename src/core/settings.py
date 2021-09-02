@@ -13,13 +13,13 @@ SECRET_KEY = 'django-insecure-9##$j00q&vpytv$@pqi!)m83x_48k32o(&fkqb5w@9iu8)j4i$
 
 DEBUG = True
 
-
 ALLOWED_HOSTS = ['*']
 
 SHELL_PLUS = 'ipython'
 
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -98,10 +98,28 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Admin",
+    "copyright": "Planeks",
+    "site_header": "CSV Generator",
+    "welcome_sign": "Добро пожаловать в админ панель",
+
+    "topmenu_links": [
+        {"model": "planeks.Csv"},
+    ],
+
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "planeks.Csv": "fas fa-file",
+    },
+}
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'ru-RU'
+LANGUAGE_CODE = 'en-EN'
 
 TIME_ZONE = 'Asia/Almaty'
 
@@ -119,7 +137,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_ROOT = os.path.join(BASE_DIR)
-MEDIA_URL = '/user_images/'
+MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
