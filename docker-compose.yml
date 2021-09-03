@@ -10,10 +10,10 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  # redis:
-  #   image: "redis:alpine"
-  #   ports:
-  #     - 6380:6379
+  redis:
+    image: "redis:alpine"
+    ports:
+      - 6379:6379
 
   django:
     working_dir: /code/src
@@ -29,37 +29,37 @@ services:
       DJANGO_SETTINGS_MODULE: core.settings
 
 
-  # celery:
-  #   command: celery -A core worker --loglevel=info -E
-  #   working_dir: /code/src
-  #   build: .
-  #   volumes:
-  #     - .:/code
-  #   depends_on:
-  #     - redis
-  #     - django
-  #   restart: on-failure
-  #   environment:
-  #     - DJANGO_SETTINGS_MODULE=core.settings
+  celery:
+    command: celery -A core worker --loglevel=info -E
+    working_dir: /code/src
+    build: .
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+      - django
+    restart: on-failure
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings
 
-  # beat:
-  #   command: celery -A core beat
-  #   working_dir: /code/src
-  #   build: .
-  #   depends_on:
-  #     - celery
-  #   restart: on-failure
-  #   environment:
-  #     - DJANGO_SETTINGS_MODULE=core.settings
+  beat:
+    command: celery -A core beat
+    working_dir: /code/src
+    build: .
+    depends_on:
+      - celery
+    restart: on-failure
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings
 
-  # flower:
-  #   build: .
-  #   working_dir: /code/src
-  #   command: celery flower -A core --broker=redis://redis:6380 --loglevel=info --persistent=True
-  #   ports:
-  #     - 5556:5555
-  #   restart: always
-  #   depends_on:
-  #     - beat
-  #   environment:
-  #     - DJANGO_SETTINGS_MODULE=core.settings
+  flower:
+    build: .
+    working_dir: /code/src
+    command: celery flower -A core --broker=redis://redis:6379 --loglevel=info --persistent=True
+    ports:
+      - 5555:5555
+    restart: always
+    depends_on:
+      - beat
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings

@@ -1,9 +1,6 @@
-import csv
 import faker
 import random
-from typing import List
 from .models import Csv
-from django.core.files.base import ContentFile
 
 
 fake = faker.Faker()
@@ -46,18 +43,3 @@ def check_characters(csv_obj: Csv) -> str:
     else:
         delim = ";"
     return delim, char
-
-
-def writer_csv(csv_obj: Csv, types: List, header: List) -> None:
-    filename = f'/code/src/csv_files/{csv_obj.name}.csv'
-    delimiter, char = check_characters(csv_obj)
-    row = csv_obj.row
-    with open(filename, 'w', encoding='UTF8', newline='') as f:
-        writer = csv.writer(f, delimiter=delimiter, quotechar=char)
-        writer.writerow(header)
-        for i in range(0, row):
-            data = generate_fake_data(types)
-            writer.writerow(data)
-    with open(filename, 'rb') as f:
-        csv_obj.csv_file = ContentFile(f.read(), name=f'{csv_obj.name}.csv')
-        csv_obj.save()

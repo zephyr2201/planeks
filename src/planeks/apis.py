@@ -1,5 +1,8 @@
 import mimetypes
-from django.http.response import HttpResponse
+
+from django.urls.base import reverse
+from .tasks import writer_csv
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from .forms import UserRegistrationForm
 from .selectors import fetch_csv
@@ -15,6 +18,18 @@ def download_file(request, pk):
         response = HttpResponse(f, content_type=mime_type)
         response['Content-Disposition'] = f'attachment; filename={obj.name}.csv'
     return response
+
+
+def process_generate(request, pk):
+    header = []
+    types = []
+    csv_obj = fetch_csv(pk)
+    for column in csv_obj.columns.all().order_by('order'):
+        header.append(column.column_name)
+        types.append(column.type)
+    writer_csv.delay(pk, types, header)
+    url = reverse('admin:planeks_csv_changelist')
+    return HttpResponseRedirect(url)
 
 
 def register(request):

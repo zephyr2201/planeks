@@ -10,6 +10,7 @@ __pycache__
 
 media
 staticfiles
+csv_files
 
 # env file
 .env
@@ -21,7 +22,7 @@ data
 .flake8
 
 #vscode
-.vscode
+.vscode/
 
 # Test / Coverage
 .coverage
