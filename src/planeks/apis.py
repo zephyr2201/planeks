@@ -1,5 +1,20 @@
+import mimetypes
+from django.http.response import HttpResponse
 from django.shortcuts import render
 from .forms import UserRegistrationForm
+from .selectors import fetch_csv
+
+
+def download_file(request, pk):
+    print(request)
+    obj = fetch_csv(pk)
+    file = obj.csv_file
+    filename = f'/code/src/{file}'
+    mime_type, _ = mimetypes.guess_type(filename)
+    with open(filename, 'r') as f:
+        response = HttpResponse(f, content_type=mime_type)
+        response['Content-Disposition'] = f'attachment; filename={obj.name}.csv'
+    return response
 
 
 def register(request):

@@ -9,32 +9,29 @@ from django.core.files.base import ContentFile
 fake = faker.Faker()
 
 
-def generate_fake_data(types, row):
+def generate_fake_data(types):
     data = []
-    for j in range(0, row):
-        array = []
-        for i in types:
-            if i == '1':
-                array.append(f'{fake.first_name_nonbinary()} {fake.last_name_nonbinary()}')
-            elif i == '2':
-                array.append(f'{fake.job()}')
-            elif i == '3':
-                array.append(f'{fake.ascii_email()}')
-            elif i == '4':
-                array.append(f'{fake.domain_name()}')
-            elif i == '5':
-                array.append(f'{fake.phone_number()}')
-            elif i == '6':
-                array.append(f'{fake.company()}')
-            elif i == '7':
-                array.append(f'{fake.paragraphs(nb=5)}')
-            elif i == '8':
-                array.append(f'{random.randint(1,100)}')
-            elif i == '9':
-                array.append(f'{fake.address()}')
-            elif i == '10':
-                array.append(f'{fake.date()}')
-        data.append(array)
+    for i in types:
+        if i == '1':
+            data.append(f'{fake.first_name_nonbinary()} {fake.last_name_nonbinary()}')
+        elif i == '2':
+            data.append(fake.job())
+        elif i == '3':
+            data.append(fake.ascii_email())
+        elif i == '4':
+            data.append(fake.domain_name())
+        elif i == '5':
+            data.append(fake.phone_number())
+        elif i == '6':
+            data.append(fake.company())
+        elif i == '7':
+            data.append(fake.paragraphs(nb=1)[0])
+        elif i == '8':
+            data.append(random.randint(1, 100))
+        elif i == '9':
+            data.append(fake.address())
+        elif i == '10':
+            data.append(fake.date())
     return data
 
 
@@ -51,13 +48,16 @@ def check_characters(csv_obj: Csv) -> str:
     return delim, char
 
 
-def writer_csv(csv_obj: Csv, data: List, header: List) -> None:
+def writer_csv(csv_obj: Csv, types: List, header: List) -> None:
     filename = f'/code/src/csv_files/{csv_obj.name}.csv'
     delimiter, char = check_characters(csv_obj)
+    row = csv_obj.row
     with open(filename, 'w', encoding='UTF8', newline='') as f:
         writer = csv.writer(f, delimiter=delimiter, quotechar=char)
         writer.writerow(header)
-        writer.writerow(data)
+        for i in range(0, row):
+            data = generate_fake_data(types)
+            writer.writerow(data)
     with open(filename, 'rb') as f:
-        csv_obj.csv_file = ContentFile(f.read(), name='ers.csv')
+        csv_obj.csv_file = ContentFile(f.read(), name=f'{csv_obj.name}.csv')
         csv_obj.save()
