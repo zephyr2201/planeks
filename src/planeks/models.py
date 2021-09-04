@@ -12,8 +12,14 @@ class BaseModel(models.Model):
 
 
 class Csv(BaseModel):
-    SEPARATORS = [('1', 'Comma(,)'), ('2', 'Semicolon(;)')]
-    QUOTE = [('1', 'Double-quote(")'), ('2', "Single-quote(')")]
+    SEPARATORS = [
+        ('1', 'Comma(,)'),
+        ('2', 'Semicolon(;)'),
+    ]
+    QUOTE = [
+        ('1', 'Double-quote(")'),
+        ('2', "Single-quote(')"),
+    ]
     row = models.IntegerField(null=True)
     name = models.CharField(max_length=255, blank=False, null=False)
     column_separator = models.CharField(max_length=50, null=False, choices=SEPARATORS)

@@ -55,7 +55,7 @@ services:
   flower:
     build: .
     working_dir: /code/src
-    command: celery flower -A core --broker=redis://redis:6379 --loglevel=info --persistent=True
+    command: celery -A core flower  --broker=redis://redis:6379 --loglevel=info --persistent=True
     ports:
       - 5555:5555
     restart: always

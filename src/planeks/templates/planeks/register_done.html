@@ -1,8 +1,9 @@
-{% extends "base.html" %}
-
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css">
+</head>
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
     <h1>Welcome {{ new_user.first_name }}!</h1>
-    <p>Your account has been successfully created. Now you can <a href="{% url "admin:login" %}">log in</a>.</p>
+    <p>Your account has been successfully created. Now you can <a href="{% url "admin:login" %}?next=/admin/">log in</a>.</p>
 {% endblock %}

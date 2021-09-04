@@ -9,9 +9,9 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'django-insecure-9##$j00q&vpytv$@pqi!)m83x_48k32o(&fkqb5w@9iu8)j4i$'
-
-DEBUG = True
+SECRET_KEY = os.getenv('SECRET_KEY')
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -31,8 +31,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'planeks',
+    'crispy_forms',
 
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -103,7 +106,7 @@ JAZZMIN_SETTINGS = {
     "site_title": "Admin",
     "copyright": "Planeks",
     "site_header": "CSV Generator",
-    "welcome_sign": "Добро пожаловать в админ панель",
+    "welcome_sign": "Welcome to Csv file generator",
 
     "topmenu_links": [
         {"model": "planeks.Csv"},

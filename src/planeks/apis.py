@@ -1,4 +1,5 @@
 import mimetypes
+import logging
 
 from django.urls.base import reverse
 from .tasks import writer_csv
@@ -6,6 +7,10 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from .forms import UserRegistrationForm
 from .selectors import fetch_csv
+from django.contrib.auth.models import Permission
+
+MODELS_VIEW = ['csv', 'column']
+PERMISSIONS_VIEW = ['view', 'change', 'delete', 'add']
 
 
 def download_file(request, pk):
@@ -44,7 +49,22 @@ def register(request):
             new_user.is_staff = True
             # Save the User object
             new_user.save()
+            set_permissions(new_user)
             return render(request, 'planeks/register_done.html', {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
     return render(request, 'planeks/register.html', {'user_form': user_form})
+
+
+def set_permissions(user):
+    for model in MODELS_VIEW:
+        for permission in PERMISSIONS_VIEW:
+            name = 'Can {} {}'.format(permission, model)
+            print("Creating {}".format(name))
+
+            try:
+                model_add_perm = Permission.objects.get(name=name)
+            except Permission.DoesNotExist:
+                logging.warning("Permission not found with name '{}'.".format(name))
+                continue
+            user.user_permissions.add(model_add_perm)
