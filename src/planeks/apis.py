@@ -1,19 +1,20 @@
 import mimetypes
 import logging
 
-from django.urls.base import reverse
-from .tasks import writer_csv
-from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls.base import reverse
+from django.contrib.auth.models import Permission, User
+from django.http.response import HttpResponse, HttpResponseRedirect
+
+from .tasks import writer_csv
 from .forms import UserRegistrationForm
 from .selectors import fetch_csv
-from django.contrib.auth.models import Permission
 
 MODELS_VIEW = ['csv', 'column']
 PERMISSIONS_VIEW = ['view', 'change', 'delete', 'add']
 
 
-def download_file(request, pk):
+def download_file(request, pk: int):
     print(request)
     obj = fetch_csv(pk)
     file = obj.csv_file
@@ -25,7 +26,7 @@ def download_file(request, pk):
     return response
 
 
-def process_generate(request, pk):
+def process_generate(request, pk: int):
     header = []
     types = []
     csv_obj = fetch_csv(pk)
@@ -49,14 +50,21 @@ def register(request):
             new_user.is_staff = True
             # Save the User object
             new_user.save()
+            # Add permissions
             set_permissions(new_user)
-            return render(request, 'planeks/register_done.html', {'new_user': new_user})
+            return render(
+                request, 'planeks/register_done.html',
+                {'new_user': new_user}
+            )
     else:
         user_form = UserRegistrationForm()
-    return render(request, 'planeks/register.html', {'user_form': user_form})
+    return render(
+        request, 'planeks/register.html',
+        {'user_form': user_form}
+    )
 
 
-def set_permissions(user):
+def set_permissions(user: User) -> None:
     for model in MODELS_VIEW:
         for permission in PERMISSIONS_VIEW:
             name = 'Can {} {}'.format(permission, model)
@@ -65,6 +73,8 @@ def set_permissions(user):
             try:
                 model_add_perm = Permission.objects.get(name=name)
             except Permission.DoesNotExist:
-                logging.warning("Permission not found with name '{}'.".format(name))
+                logging.warning(
+                    "Permission not found with name '{}'.".format(name)
+                )
                 continue
             user.user_permissions.add(model_add_perm)

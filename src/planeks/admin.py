@@ -22,6 +22,7 @@ class CsvAdmin(admin.ModelAdmin):
             )
     download_link.short_description = "Download"
 
+    # Link to generate csv file
     def account_actions(self, obj):
         return format_html(
             '<a class="button" href="{}">Generate data</a>',

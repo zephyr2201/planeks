@@ -1,7 +1,7 @@
 import csv
-from .selectors import fetch_csv
 from typing import List
 from pathlib import Path
+
 from core.celery import app
 from django.core.files.base import ContentFile
 
@@ -9,6 +9,7 @@ from .services import (
     check_characters,
     generate_fake_data,
 )
+from .selectors import fetch_csv
 
 
 @app.task(max_retries=None, time_limit=10800)
@@ -27,5 +28,8 @@ def writer_csv(pk: int, types: List, header: List) -> None:
             writer.writerow(data)
     # Create field
     with open(filename, 'rb') as f:
-        csv_obj.csv_file = ContentFile(f.read(), name=f'{csv_obj.name}.csv')
+        csv_obj.csv_file = ContentFile(
+            f.read(),
+            name=f'{csv_obj.name}.csv'
+        )
         csv_obj.save()

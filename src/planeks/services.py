@@ -1,12 +1,14 @@
 import faker
 import random
+from typing import List
+
 from .models import Csv
 
 
 fake = faker.Faker()
 
 
-def generate_fake_data(types):
+def generate_fake_data(types: List) -> List:
     data = []
     for i in types:
         if i == '1':
