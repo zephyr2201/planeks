@@ -1,0 +1,12 @@
+.idea 
+venv
+.vscode 
+**/*.pyc 
+**/__pycache__ 
+.pytest-cache 
+data
+**/*.log 
+**/*.json
+src/media
+src/staticfiles
+src/csv_files
