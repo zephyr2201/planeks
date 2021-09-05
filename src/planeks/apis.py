@@ -10,7 +10,7 @@ from .tasks import writer_csv
 from .forms import UserRegistrationForm
 from .selectors import fetch_csv
 
-MODELS_VIEW = ['csv', 'column']
+MODELS_VIEW = ['New schema', 'column']
 PERMISSIONS_VIEW = ['view', 'change', 'delete', 'add']
 
 
