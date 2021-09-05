@@ -9,9 +9,9 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.getenv('SECRET_KEY')
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+SECRET_KEY = 'j$4x!la0oo3hy4*(6$8vvbsvq7-xh8-8(@2^_b)s(e*bgiag&k'
+
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -84,6 +84,10 @@ DATABASES = {
         'PORT': 5432,
     }
 }
+
+import dj_database_url 
+prod_db  =  dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(prod_db)
 
 
 # Password validation
