@@ -12,4 +12,5 @@ RUN pip install -r requirements.txt
 # copy project
 COPY . /code/
 
+# CMD gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
 
