@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -83,7 +84,6 @@ DATABASES = {
         # 'PORT': 5432,
     }
 }
-import dj_database_url
 db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 DATABASES['default']['CONN_MAX_AGE'] = 500
@@ -143,7 +143,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-CELERY_BROKER_URL = 'redis://:pd1ef0181133a436b0d7097d867d8d3127af6cb9f192d5a4f41ac919568fb06ca@ec2-44-197-56-240.compute-1.amazonaws.com:13030'
+CELERY_BROKER_URL = os.getenv('REDIS_URL')
 
 MEDIA_ROOT = os.path.join(BASE_DIR)
 MEDIA_URL = '/media/'
