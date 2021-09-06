@@ -65,6 +65,8 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
@@ -73,15 +75,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'postgres',
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'postgres',
+        # 'HOST': 'db',
+        # 'PORT': 5432,
     }
 }
-
+import dj_database_url
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
+DATABASES['default']['CONN_MAX_AGE'] = 500
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -138,6 +143,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+CELERY_BROKER_URL = 'redis://:pd1ef0181133a436b0d7097d867d8d3127af6cb9f192d5a4f41ac919568fb06ca@ec2-44-197-56-240.compute-1.amazonaws.com:13030'
 
 MEDIA_ROOT = os.path.join(BASE_DIR)
 MEDIA_URL = '/media/'

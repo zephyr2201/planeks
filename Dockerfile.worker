@@ -11,5 +11,8 @@ RUN pip install -r requirements.txt
 
 # copy project
 COPY . /code/
+ 
+WORKDIR src/
+# CMD python manage.py migrate && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000
 
-
+CMD celery -A core worker -B --loglevel=INFO --concurrency=1
