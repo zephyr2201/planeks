@@ -1,4 +1,7 @@
-Поднять проект docker-compose up -d --build
+Проект поднят на Heroku
 
-Register:
-localhost:8001/register/
+app: peaceful-fjord-09090
+
+Register: 
+https://peaceful-fjord-09090.herokuapp.com/register/
+
