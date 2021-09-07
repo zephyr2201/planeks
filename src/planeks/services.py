@@ -1,11 +1,27 @@
 import faker
+import logging
+import requests
 import random
 from typing import List
 
 from .models import Csv
+from core.settings import URL
 
 
 fake = faker.Faker()
+
+logger = logging.getLogger(__name__)
+
+
+def send_to_file(file, pk: int):
+    files = {
+            'file_uploaded': file,
+        }
+    data = {'obj': pk}
+    try:
+        requests.post(URL, files=files, data=data)
+    except Exception as e:
+        logger.error(e, exc_info=True)
 
 
 def generate_fake_data(types: List) -> List:

@@ -1,5 +1,7 @@
 import mimetypes
 import logging
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from django.shortcuts import render
 from django.urls.base import reverse
@@ -9,9 +11,37 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from .tasks import writer_csv
 from .forms import UserRegistrationForm
 from .selectors import fetch_csv
+from rest_framework import serializers, status
+from django.core.files.base import ContentFile
+
 
 MODELS_VIEW = ['New schema', 'column']
 PERMISSIONS_VIEW = ['view', 'change', 'delete', 'add']
+
+
+class Callback(APIView):
+    class InputSerializer(serializers.Serializer):
+        file_uploaded = serializers.FileField()
+        obj = serializers.IntegerField()
+
+        class Meta:
+            fields = ['file_uploaded']
+
+    def post(self, request):
+        serializer = self.InputSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        file = request.FILES['file_uploaded']
+        pk = request.data.get('obj')
+        csv_obj = fetch_csv(pk)
+        csv_obj.csv_file = ContentFile(
+            file.read(),
+            name=f'{csv_obj.name}.csv'
+        )
+        csv_obj.save()
+        return Response(
+                {'result': 1, 'success': True},
+                status=status.HTTP_201_CREATED
+            )
 
 
 def download_file(request, pk: int):
