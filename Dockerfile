@@ -11,7 +11,3 @@ RUN pip install -r requirements.txt
 
 # copy project
 COPY . /code/
- 
-WORKDIR src/
-
-CMD celery -A core worker -B --loglevel=INFO --concurrency=1

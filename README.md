@@ -1,4 +1,7 @@
-Поднять проект docker-compose up -d --build
+Поднять проект локально: docker-compose up -d --build
 
 Register:
-localhost:8001/register/
+localhost:8000/register/
+
+
+Проект для деплоя в heroku: git-branch (deploy_heroku)
