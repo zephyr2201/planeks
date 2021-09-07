@@ -5,7 +5,6 @@ import random
 from typing import List
 
 from .models import Csv
-from core.settings import URL
 
 
 fake = faker.Faker()
@@ -13,13 +12,14 @@ fake = faker.Faker()
 logger = logging.getLogger(__name__)
 
 
-def send_to_file(file, pk: int):
+def send_to_file(file, pk: int, port: str):
+    url = f'https://localhost:{port}/callback/'
     files = {
             'file_uploaded': file,
         }
     data = {'obj': pk}
     try:
-        requests.post(URL, files=files, data=data)
+        requests.post(url, files=files, data=data)
     except Exception as e:
         logger.error(e, exc_info=True)
 

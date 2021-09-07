@@ -59,11 +59,12 @@ def download_file(request, pk: int):
 def process_generate(request, pk: int):
     header = []
     types = []
+    port = request.META['SERVER_PORT']
     csv_obj = fetch_csv(pk)
     for column in csv_obj.columns.all().order_by('order'):
         header.append(column.column_name)
         types.append(column.type)
-    writer_csv.delay(pk, types, header)
+    writer_csv.delay(pk, types, header, port)
     url = reverse('admin:planeks_csv_changelist')
     return HttpResponseRedirect(url)
 

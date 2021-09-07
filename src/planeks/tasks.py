@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 @app.task(max_retries=None, time_limit=10800)
-def writer_csv(pk: int, types: List, header: List) -> None:
+def writer_csv(pk: int, types: List, header: List, port: str) -> None:
     Path("csv_files").mkdir(parents=True, exist_ok=True)
     csv_obj = fetch_csv(pk)
     filename = f'/code/src/csv_files/{csv_obj.name}.csv'
@@ -33,4 +33,4 @@ def writer_csv(pk: int, types: List, header: List) -> None:
             writer.writerow(data)
 
     with open(filename, 'rb') as f:
-        send_to_file(f, pk)
+        send_to_file(f, pk, port)
